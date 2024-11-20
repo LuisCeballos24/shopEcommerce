@@ -42,17 +42,17 @@ export function Search() {
     const products = () => {
         if (debounced.length >= 2 && data?.length > 0) {
             return data?.filter(product => {
-                if (product.title.toLowerCase().includes(search.toLowerCase())) {
+                if (product.name.toLowerCase().includes(search.toLowerCase())) {
                     filtersProducts.push(product)
                     return product
                 }
             }).map((product,index) => {
-                return <Link to={`/products/${product.id}`} onClick={() => clickHandler(product.id)}
+                return <Link to={`/products/${product.producto_id}`} onClick={() => clickHandler(product.producto_id)}
                              className='text-black flex items-center max-h-[80px] mb-4 border-b pb-2 last:border-0 last:mb-0 hover:opacity-50 transition'
                              key={index}>
-                    <img className='w-[50px] mr-4 max-h-[75px]' src={product.image} alt={product.title}/>
+                    <img className='w-[50px] mr-4 max-h-[75px]' src={product.image} alt={product.name}/>
                     <div>
-                        <p className='text-base'>{product.title}</p>
+                        <p className='text-base'>{product.name}</p>
                         <p className='text-md font-medium'>$ {product.price}</p>
                     </div>
                 </Link>

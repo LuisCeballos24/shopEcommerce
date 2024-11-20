@@ -24,10 +24,10 @@ export const optionsProducts = {
 }
 
 export const inputsCategory = [
-    {id: "men's clothing", textContext: "Men's clothing"},
-    {id: "women's clothing", textContext: "Women's clothing"},
-    {id: "jewelery", textContext: "Jewelery"},
-    {id: "electronics", textContext: "Electronics"}
+    {id: "Men's clothing", textContext: "Men's clothing"},
+    {id: "Women's clothing", textContext: "Women's clothing"},
+    {id: "Jewelery", textContext: "Jewelery"},
+    {id: "Electronics", textContext: "Electronics"}
 ]
 
 export const inputsRating = [
