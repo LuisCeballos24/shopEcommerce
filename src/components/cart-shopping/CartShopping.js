@@ -49,7 +49,7 @@ export function CartShopping({cart}) {
                                     <button className='text-[#3e77aa] hover:text-red-500 transition p-2 sm:p-3' onClick={() => clearCartBtn(cart)}>Delete All</button>
                                 </div>
                                 <div className={`px-1 py-2 sm:py-4 sm:px-6 ${cart.length > 2 ? 'box-item' : ''}`}>
-                                    {cart.map(item => <CartItem key={item.id} item={item}/>)}
+                                    {cart.map(item => <CartItem item={item}/>)}
                                 </div>
                                 <div className='flex justify-center pr-0 py-3 sm:py-4 sm:pr-6 sm:justify-end'>
                                     <div className='bg-gray-200 w-fit py-3 px-2 rounded-xl border border-gray-500 flex flex-col justify-between items-center sm:flex-row sm:py-6 sm:px-4'>

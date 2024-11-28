@@ -17,9 +17,12 @@ export function Header() {
         : document.querySelector('body').style.overflow = 'visible'
 
     return (
-        <header className='w-screen bg-[#221f1f] fixed z-10 top-0 h-[50px]'>
+        <header className='w-screen bg-[#221f1f] fixed z-10 top-0 h-[60px]'>
             <div className='container text-lg flex justify-between items-center text-white h-[50px] max-w-[1240px] m-auto px-2'>
-                <a href='/' >React Shop</a>
+            <a href='/' className='flex items-center'>
+            <img src='https://lh3.googleusercontent.com/pw/AP1GczOc_UevyKjJKSlg4EntLcdskz1bHi2U8oBVgjUDLIqjfTZDD6-64iC0HsNLtcvLAs1LquMyQlfFCS1tvBK4PBdZs0KhXf-RGqOF8JEFXdeV4mNoCUvRFIawr5d7BnLJexqHF11L8b9B2uDz5WBRTP8A_A=w500-h500-s-no-gm?authuser=0' alt="Logo" className='w-16 h-16 mr-2' />
+            <span>essentialstorepty</span>
+        </a>
                 <Search />
                 <ul className='flex justify-between'>
                     <button className='block md:hidden mr-2 px-[8px]' onClick={toggleSearch}>
