@@ -1,168 +1,218 @@
-<html lang="en">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>
-   Checkout Page
-  </title>
-  <script src="https://cdn.tailwindcss.com">
-  </script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
- </head>
- <body class="bg-gray-100">
-  <main class="container mx-auto px-4 py-8">
-   <div class="flex space-x-8">
-    <div class="w-2/3 bg-white p-8 rounded-lg shadow-sm">
-     <div class="flex items-center space-x-4 mb-8">
-      <a class="text-blue-500" href="#">
-       Account
-      </a>
-      <i class="fas fa-check text-blue-500">
-      </i>
-      <span class="text-blue-500">
-       Shipping
-      </span>
-      <i class="fas fa-check text-blue-500">
-      </i>
-      <span>
-       Payment
-      </span>
-     </div>
-     <h2 class="text-xl font-bold mb-4">
-      Shipping details
-     </h2>
-     <div class="space-y-4">
-      <div>
-       <label class="block text-gray-700 mb-2">
-        Use saved address
-       </label>
-       <div class="relative">
-        <input class="w-full p-3 border border-gray-300 rounded-lg" readonly="" type="text" value="123 , Electric avenue"/>
-        <i class="fas fa-caret-down absolute right-3 top-3 text-gray-500">
-        </i>
-       </div>
-      </div>
-      <div>
-       <label class="block text-gray-700 mb-2">
-        First line of address
-       </label>
-       <div class="relative">
-        <input class="w-full p-3 border border-gray-300 rounded-lg" readonly="" type="text" value="123"/>
-        <i class="fas fa-check absolute right-3 top-3 text-gray-500">
-        </i>
-       </div>
-      </div>
-      <div>
-       <label class="block text-gray-700 mb-2">
-        Street name
-       </label>
-       <div class="relative">
-        <input class="w-full p-3 border border-gray-300 rounded-lg" readonly="" type="text" value="Electric avenue"/>
-        <i class="fas fa-check absolute right-3 top-3 text-gray-500">
-        </i>
-       </div>
-      </div>
-      <div class="flex space-x-4">
-       <div class="w-1/2">
-        <label class="block text-gray-700 mb-2">
-         Postcode
-        </label>
-        <input class="w-full p-3 border border-gray-300 rounded-lg" readonly="" type="text" value="ABC - 123"/>
-       </div>
-       <div class="w-1/2">
-        <label class="block text-gray-700 mb-2">
-         Select shipping
-        </label>
-        <div class="relative">
-         <input class="w-full p-3 border border-gray-300 rounded-lg" readonly="" type="text" value="Free delivery"/>
-         <i class="fas fa-caret-down absolute right-3 top-3 text-gray-500">
-         </i>
+import { useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { ubications } from '../../constants/constants';
+
+// Componente individual para cada item en el carrito
+const CheckoutItem = ({ item, onRemove, onIncrement, onDecrement }) => {
+  const handleIncrement = () => {
+    onIncrement(item.producto_id);
+  };
+
+  const handleDecrement = () => {
+    if (item.quantity > 1) {
+      onDecrement(item.producto_id);
+    }
+  };
+
+  const sum = item.price * item.quantity;
+
+  return (
+    <div className='py-4 px-2 sm:px-4 border-b'>
+      <div className='flex justify-between'>
+        <div className='flex'>
+          <img className='w-[60px]' src={item.image} alt={item.name} />
+          <span className='pl-3 pt-2 text-sm sm:text-lg'>{item.name}</span>
         </div>
-       </div>
-      </div>
-     </div>
-     <div class="flex justify-between items-center mt-8">
-      <button class="text-gray-600 hover:text-black">
-       Cancel order
-      </button>
-      <button class="bg-blue-500 text-white px-6 py-3 rounded-lg">
-       Payment
-      </button>
-     </div>
-    </div>
-    <div class="w-1/3 bg-white p-8 rounded-lg shadow-sm">
-     <h2 class="text-xl font-bold mb-4">
-      Order Summary
-     </h2>
-     <div class="flex items-center mb-4">
-      <img alt="Sony wireless headphones" class="w-20 h-20 object-cover rounded-lg" height="100" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-geyQbksslRyrFcXZxAJvclTq/user-MLMMiGFXcZePXSOI8PfU2Mu8/img-Nswq4eu2x37eI57rtStIgd9f.png?st=2024-11-20T07%3A12%3A14Z&amp;se=2024-11-20T09%3A12%3A14Z&amp;sp=r&amp;sv=2024-08-04&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=d505667d-d6c1-4a0a-bac7-5c84a87759f8&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-11-20T01%3A16%3A41Z&amp;ske=2024-11-21T01%3A16%3A41Z&amp;sks=b&amp;skv=2024-08-04&amp;sig=BeOmvIvszVJ9PueNhj/LZjO4Mtu4vTRmmh9Fz6SdUUI%3D" width="100"/>
-      <div class="ml-4">
-       <h3 class="text-lg font-semibold">
-        Sony wireless headphones
-       </h3>
-       <p class="text-gray-700">
-        £320.45
-       </p>
-       <div class="flex items-center space-x-2 mt-2">
-        <button class="bg-gray-200 text-gray-600 px-2 py-1 rounded">
-         -
+        <button 
+          className='h-fit pt-2 cursor-pointer text-[#3e77aa] hover:text-red-500 transition' 
+          onClick={() => onRemove(item.producto_id)}
+        >
+          🗑️
         </button>
-        <span>
-         1
-        </span>
-        <button class="bg-gray-200 text-gray-600 px-2 py-1 rounded">
-         +
-        </button>
-       </div>
       </div>
-     </div>
-     <div class="mb-4">
-      <label class="block text-gray-700 mb-2">
-       Gift Card / Discount code
-      </label>
-      <div class="flex">
-       <input class="w-full p-3 border border-gray-300 rounded-l-lg" type="text"/>
-       <button class="bg-blue-500 text-white px-4 py-3 rounded-r-lg">
-        Apply
-       </button>
+      <div className='flex justify-between items-center relative mt-4 sm:mt-2 sm:justify-end'>
+        <div className='relative bottom-0 right-0 text-lg sm:absolute sm:right-[300px]'>
+          ${item.price}
+        </div>
+        <div className='relative right-0 bottom-0 sm:right-[140px] sm:absolute'>
+          <button
+            className={item.quantity > 1 ? 'text-[#3e77aa]' : 'text-black'}
+            disabled={item.quantity <= 1}
+            onClick={handleDecrement}
+          >
+            -
+          </button>
+          <span className='mx-2 border px-2 py-1 rounded-md sm:px-4 sm:py-2'>
+            {item.quantity}
+          </span>
+          <button
+            className='text-[#3e77aa]'
+            onClick={handleIncrement}
+          >
+            +
+          </button>
+        </div>
+        <span className='text-lg'>${sum.toFixed(2)}</span>
       </div>
-     </div>
-     <div class="space-y-2">
-      <div class="flex justify-between">
-       <span class="text-gray-700">
-        Sub total
-       </span>
-       <span class="text-gray-700">
-        £316.55
-       </span>
-      </div>
-      <div class="flex justify-between">
-       <span class="text-gray-700">
-        Tax
-       </span>
-       <span class="text-gray-700">
-        £3.45
-       </span>
-      </div>
-      <div class="flex justify-between">
-       <span class="text-gray-700">
-        Shipping
-       </span>
-       <span class="text-green-500">
-        Free
-       </span>
-      </div>
-      <div class="flex justify-between font-bold text-lg">
-       <span>
-        Total
-       </span>
-       <span>
-        £320.45
-       </span>
-      </div>
-     </div>
     </div>
-   </div>
-  </main>
- </body>
-</html>
+  );
+};
+
+export function CheckoutShipping() {
+  const location = useLocation();
+  const { cart: initialCart } = location.state || {};
+  
+  const [cartItems, setCartItems] = useState(initialCart || []);
+  const [selectedProvince, setSelectedProvince] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [deliveryFee, setDeliveryFee] = useState(0);
+
+  const handleProvinceChange = (event) => {
+    setSelectedProvince(event.target.value);
+    setSelectedDistrict(""); // Resetear distrito cuando cambie provincia
+  };
+
+  const selectedProvinceData = ubications[0].provinces.find(
+    (province) => province.name === selectedProvince
+  );
+
+  // Obtener los datos del distrito seleccionado
+  const selectedDistrictData = selectedProvinceData?.districts.find(
+    (district) => district.name === selectedDistrict
+  );
+  // Manejo de cambio de distrito
+
+  const handleDistrictChange = (event) => {
+    const district = event.target.value;
+    setSelectedDistrict(district);
+    
+    if (district === "Panamá") {
+      setDeliveryFee(2.00);
+    } else if (district === "San Miguelito") {
+      setDeliveryFee(2.50);
+    } else {
+      setDeliveryFee(0);
+    }
+  };
+
+
+
+  const incrementProduct = (producto_id) => {
+    setCartItems(prevItems =>
+      prevItems.map(item =>
+        item.producto_id === producto_id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      )
+    );
+  };
+
+  const decrementProduct = (producto_id) => {
+    setCartItems(prevItems =>
+      prevItems.map(item =>
+        item.producto_id === producto_id && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      )
+    );
+  };
+
+  const removeProduct = (producto_id) => {
+    setCartItems(prevItems => 
+      prevItems.filter(item => item.producto_id !== producto_id)
+    );
+  };
+
+  const calculateTotal = () => {
+    const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    return (subtotal + deliveryFee).toFixed(2);
+  };
+
+  return (
+    <main className="container mx-auto px-4 py-8">
+      <div className="flex flex-col sm:flex-row space-x-0 sm:space-x-8">
+        {/* Sección de detalles de envío */}
+        <div className="w-full sm:w-2/3 bg-white p-8 rounded-lg shadow-sm">
+          <h2 className="text-xl font-bold mb-4">Shipping Details</h2>
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-2">Province</label>
+            <select 
+              value={selectedProvince} 
+              onChange={handleProvinceChange} 
+              className="w-full border px-3 py-2 rounded-lg"
+            >
+              <option>Seleccionar Provincia</option>
+                {ubications[0].provinces.map((province) => (
+                  <option key={province.name} value={province.name}>
+                    {province.name}
+                  </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-2">District</label>
+            <select
+                className="w-full p-3 border border-gray-300 rounded-lg"
+                onChange={handleDistrictChange}
+                disabled={!selectedProvince}
+                value={selectedDistrict} // Establecer el valor seleccionado
+              >
+                <option>Seleccionar Distrito</option>
+                {selectedProvinceData?.districts.map((districts) => (
+                  <option key={districts.name} value={districts.name}>
+                    {districts.name}
+                  </option>
+                ))}
+              </select>
+          </div>
+
+          <div>
+              <label className="block text-gray-700 mb-2">Estacion del metro</label>
+              <select className="w-full p-3 border border-gray-300 rounded-lg" disabled={!selectedDistrict}>
+                <option>Seleccionar Estacion del metro</option>
+                {selectedDistrictData?.metroStations.map((metroStations) => (
+                  <option key={metroStations} value={metroStations}>
+                    {metroStations}
+                  </option>
+                ))}
+              </select>
+            </div>
+          <p className="text-gray-700">Delivery Fee: ${deliveryFee.toFixed(2)}</p>
+        </div>
+
+        {/* Sección del resumen del pedido */}
+        <div className="w-full sm:w-1/3 bg-white p-8 rounded-lg shadow-sm mt-8 sm:mt-0">
+          <h2 className="text-xl font-bold mb-4">Order Summary</h2>
+          <div>
+            {cartItems.map((item) => (
+              <CheckoutItem
+                key={item.producto_id}
+                item={item}
+                onIncrement={incrementProduct}
+                onDecrement={decrementProduct}
+                onRemove={removeProduct}
+              />
+            ))}
+          </div>
+          <div className="space-y-2 mt-4 pt-4 border-t">
+            <div className="flex justify-between">
+              <span className="text-gray-700">Subtotal</span>
+              <span className="text-gray-700">
+                ${cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-700">Delivery Fee</span>
+              <span className="text-gray-700">${deliveryFee.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between font-bold pt-2 border-t">
+              <span>Total</span>
+              <span>${calculateTotal()}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}
