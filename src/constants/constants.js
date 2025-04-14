@@ -23,11 +23,41 @@ export const optionsProducts = {
     ]
 }
 
+ 
+export const ubications = [
+  {
+    "provinces": [
+      {
+        "name": "Panamá",
+        "districts": [
+          {
+            "name": "Panamá",
+            "metroStations": [
+              "Albrook", "5 de Mayo", "Loteria", "Santo Tomas", "Iglesia del carmen","Via Argentina", "Fernandez de Cordoba", "El Ingenio","12 de octubre","Pueblo Nuevo", "San Miguelito", "Pan de Azucar", "Los Andes", "San Isidro","Villa Zaita"
+            ]
+          },
+              {
+                "name": "San Miguelito",
+                "metroStations": [
+                  "San Miguelito", "Paraiso", "Cincuentenario", "Villa Lucre", "El Crisol","Brisas del Golf","Cerro Viento","San Antonio","Pedregal","Don Bosco","Corredor Sur","Las Mañanitas","Hospital del Este","Altos de Tocumen","24 de Diciembre","Nuevo Tocumen"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+      
+    ];
+
+
 export const inputsCategory = [
     {id: "Men's clothing", textContext: "Men's clothing"},
+    {id: "Home", textContext: "Home"},
+    {id: "Men Perfum", textContext: "Men Perfum"},
+    {id: "Accesories", textContext: "Accesories"},
     {id: "Women's clothing", textContext: "Women's clothing"},
     {id: "Jewelery", textContext: "Jewelery"},
-    {id: "Electronics", textContext: "Electronics"}
+    {id: "Electronics", textContext: "Electronics"},
 ]
 
 export const inputsRating = [
