@@ -48,7 +48,7 @@ export function CartShopping({ cart }) {
       >
         <div className="bg-white mx-4 rounded-lg w-[95%] sm:w-[500px] sm:mx-0 md:w-[700px] lg:w-[900px]">
           <div className="flex justify-between items-center p-3 border-b">
-            <span className="text-lg sm:text-xl">Shopping cart</span>
+            <span className="text-lg sm:text-xl">Carrito de compras</span>
             <button onClick={toggleClose}>
               <FontAwesomeIcon className="text-gray-500 hover:text-gray-600 transition" icon={faX} />
             </button>
@@ -61,7 +61,7 @@ export function CartShopping({ cart }) {
             <>
               <div className="flex justify-end">
                 <button className="text-[#3e77aa] hover:text-red-500 transition p-2 sm:p-3" onClick={() => clearCartBtn(cart)}>
-                  Delete All
+                  Eliminar todo
                 </button>
               </div>
               <div className={`px-1 py-2 sm:py-4 sm:px-6 ${cart.length > 2 ? "box-item" : ""}`}>
@@ -72,14 +72,14 @@ export function CartShopping({ cart }) {
               <div className="flex justify-center pr-0 py-3 sm:py-4 sm:pr-6 sm:justify-end">
                 <div className="bg-gray-200 w-fit py-3 px-2 rounded-xl border border-gray-500 flex flex-col justify-between items-center sm:flex-row sm:py-6 sm:px-4">
                   <div className="mr-0 sm:mr-4">
-                    <span className="mr-2 text-base sm:text-xl">Order total:</span>
+                    <span className="mr-2 text-base sm:text-xl">Total Orden:</span>
                     <span className="text-base sm:text-xl">{totalPrice()} $</span>
                   </div>
                   <button
                     className="text-sm sm:text-lg uppercase bg-black text-white py-1 px-4 rounded hover:bg-gray-500 transition mt-1 sm:mt-0"
                     onClick={handleBuyNowClick}
                   >
-                    Buy Now
+                    Comprar ahora
                   </button>
                 </div>
               </div>

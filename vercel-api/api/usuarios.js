@@ -1,6 +1,7 @@
 import { supabase } from '../supabaseClient';
 
-res.setHeader('Access-Control-Allow-Origin', 'https://essentialstorepty.com'); // Permitir origen
+res.setHeader('Access-Control-Allow-Origin', 'https://essentialstorepty.com');
+res.setHeader('Access-Control-Allow-Origin', 'https://localhost:3000');  // Permitir origen
 res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); // Métodos permitidos
 res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 

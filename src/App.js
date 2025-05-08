@@ -6,7 +6,8 @@ import { ProductOverView } from "./pages/ProductOverView";
 import { Header } from "./components/header/Header";
 import { Footer } from "./components/footer/Footer";
 import { BtnScroll } from "./components/btn-scroll/BtnScroll";
-import {CheckoutShipping} from "./components/checkout/CheckoutShipping";
+import {CheckoutShipping} from "./components/checkout/checkoutShipping";
+import {CheckoutPayment} from "./components/checkout/checkoutPayment";
 import AddProductForm from "./pages/addProduct";
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
                         <Route path="/products/:id" element={<ProductOverView />} />
                         <Route path="/agregar" element={<AddProductForm />} />
                         <Route path="/checkoutshipping" element={<CheckoutShipping />} />
+                        <Route path="/checkoutPayment" element={<CheckoutPayment />} />
                     </Routes>
                 </main>
                 <BtnScroll />

@@ -33,9 +33,9 @@ export function ProductDetailItem({product, refetch, status}) {
     }
 
     const optionsProduct = category => {
-        if (category === 'Men\'s clothing' || category === 'Women\'s clothing') return <Colors />
-        if (category === 'jewelery') return <Sizes />
-        if (category === 'electronics') return <Brands />
+        if (category === 'Ropa de Hombre' || category === 'Ropa de Hombre') return <Colors />
+        if (category === 'Joyeria') return <Sizes />
+        if (category === 'Electronica') return <Brands />
     }
 
     const clickHandler = (productId) => {
@@ -55,7 +55,7 @@ export function ProductDetailItem({product, refetch, status}) {
             <div className='px-2 pb-6'>
                 <p className='capitalize text-gray-500 mb-6 text-sm font-semibold sm:text-base'>
                     <Link to='/' className='transition hover:border-b-2 border-b-gray-500'>
-                        Home
+                        Inicio
                     </Link>
                     <span className='px-2'>\</span>
                     {product.Category.name}
@@ -88,7 +88,7 @@ export function ProductDetailItem({product, refetch, status}) {
                                 {
                                     isCart
                                         ? <FontAwesomeIcon className='text-[25px] sm:text-[30px]' icon={faCheck} />
-                                        : <> Add to bag
+                                        : <> Agregar al carrito
                                             <span className='ml-2'><FontAwesomeIcon icon={faCartShopping} /></span>
                                         </>
                                 }
@@ -97,7 +97,7 @@ export function ProductDetailItem({product, refetch, status}) {
                     </div>
                 </div>
                 <div className='mt-[100px]'>
-                    <p className='text-xl font-medium w-fit border-b-2 border-b-gray-500 mx-auto lg:mx-0'>You may also be interested</p>
+                    <p className='text-xl font-medium w-fit border-b-2 border-b-gray-500 mx-auto lg:mx-0'>Tambien te puede interesar</p>
                     <div className={`flex justify-start mt-8 overflow-x-auto lg:overflow-x-hidden ${filterProductFooter?.length > 0 ? 'lg:justify-center' : 'sm:justify-center'}`}>
                         {error && <div>{error.error}</div>}
                         {isLoading && <Loader />}

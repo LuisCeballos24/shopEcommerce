@@ -51,13 +51,13 @@ export const ubications = [
 
 
 export const inputsCategory = [
-    {id: "Men's clothing", textContext: "Men's clothing"},
-    {id: "Home", textContext: "Home"},
-    {id: "Men Perfum", textContext: "Men Perfum"},
-    {id: "Accesories", textContext: "Accesories"},
-    {id: "Women's clothing", textContext: "Women's clothing"},
-    {id: "Jewelery", textContext: "Jewelery"},
-    {id: "Electronics", textContext: "Electronics"},
+    {id: "Ropa de Hombre", textContext: "Ropa de Hombre"},
+    {id: "Casa", textContext: "Casa"},
+    {id: "Perfume de Hombre", textContext: "Perfume de Hombre"},
+    {id: "Accesorios", textContext: "Accesorios"},
+    {id: "Ropa de Mujer", textContext: "Ropa de Mujer"},
+    {id: "Joyeria", textContext: "Joyeria"},
+    {id: "Electronica", textContext: "Electronica"},
 ]
 
 export const inputsRating = [
@@ -67,7 +67,7 @@ export const inputsRating = [
         classInput: 'w-[15px]',
         classDiv: 'flex',
         classLabel: 'pl-1 cursor-pointer',
-        textContent: 'Above average'
+        textContent: 'Mejor Calificado'
     },
     {
         type: 'checkbox',
@@ -75,6 +75,6 @@ export const inputsRating = [
         classInput: 'w-[15px]',
         classDiv: 'flex mt-2',
         classLabel: 'pl-1 cursor-pointer',
-        textContent: 'Below average'
+        textContent: 'Peor Calificado'
     }
 ]
