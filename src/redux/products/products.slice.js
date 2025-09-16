@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit";
 
 const productsSlice = createSlice({
     name: 'products',
@@ -7,21 +7,23 @@ const productsSlice = createSlice({
         btnCart: null,
         filters: {},
         search: false,
-        searchFilterProducts: null
+        searchFilterProducts: null,
+        showModal: false, // NUEVO
+        addedToCartModal: {
+            visible: false,
+            productName: ""
+        }
     },
     reducers: {
         clearCart(state, action) {
             state.cart = state.cart.slice(0, action.payload)
         },
         addProductToCart(state, action) {
-            // Genera un uniqueId basado en las propiedades relevantes del producto
             const existingProduct = state.cart.find((item) => item.producto_id === action.payload.producto_id);
 
             if (existingProduct) {
-                // Si el producto ya existe, incrementa la cantidad
                 existingProduct.quantity++;
             } else {
-                // Si el producto no existe, lo agrega al carrito con cantidad 1
                 state.cart.push({
                     ...action.payload,
                     quantity: 1
@@ -29,37 +31,49 @@ const productsSlice = createSlice({
             }
         },
         incrementProductInCart(state, action) {
-            const item = state.cart.find(item => item.producto_id === action.payload)
-            item.quantity++
+            const item = state.cart.find(item => item.producto_id === action.payload);
+            item.quantity++;
         },
         decrementProductInCart(state, action) {
-            const item = state.cart.find(item => item.producto_id === action.payload)
-            if (item.quantity === 1) {
-                item.quantity = 1
-            } else {
-                item.quantity--
+            const item = state.cart.find(item => item.producto_id === action.payload);
+            if (item.quantity > 1) {
+                item.quantity--;
             }
         },
         toggleBtnCart(state, action) {
-            state.btnCart = action.payload
+            state.btnCart = action.payload;
         },
         removeItemFromCart(state, action) {
-            state.cart = state.cart.filter(el => el.producto_id !== action.payload)
-            console.log(state.cart)
+            state.cart = state.cart.filter(el => el.producto_id !== action.payload);
         },
         filtersProductsByCategory(state, action) {
-            state.filters = action.payload
+            state.filters = action.payload;
         },
         toggleSearchForm(state, action) {
-            state.search = action.payload
+            state.search = action.payload;
         },
         setSearchFilterProducts(state, action) {
-            state.searchFilterProducts = action.payload
-        }
-    },
-})
+            state.searchFilterProducts = action.payload;
+        },
 
-export const productReducer = productsSlice.reducer
+        // 🎉 NUEVOS REDUCERS PARA EL MODAL
+        showAddedToCartModal(state, action) {
+            state.addedToCartModal = {
+                visible: true,
+                productName: action.payload
+            };
+        },
+        hideAddedToCartModal(state) {
+            state.addedToCartModal = {
+                visible: false,
+                productName: ""
+            };
+        }
+    }
+});
+
+export const productReducer = productsSlice.reducer;
+
 export const {
     clearCart,
     addProductToCart,
@@ -69,5 +83,8 @@ export const {
     removeItemFromCart,
     filtersProductsByCategory,
     toggleSearchForm,
-    setSearchFilterProducts
-} = productsSlice.actions
+    setSearchFilterProducts,
+    showAddedToCartModal,
+    hideAddedToCartModal,
+    toggleCartModal // NUEVO
+} = productsSlice.actions;

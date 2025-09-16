@@ -1,21 +1,21 @@
-import React, {useContext} from "react"
-import {Link} from "react-router-dom"
-import {useGetProductByCategoryQuery} from "../../redux/products/products.api"
-import {faCartShopping, faCheck, faStar} from "@fortawesome/free-solid-svg-icons"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {Loader} from "../loader/Loader"
-import {useDispatch, useSelector} from "react-redux"
-import {addProductToCart} from "../../redux/products/products.slice"
-import {Context} from "../../context/context"
-import {Colors} from "../optionsProduct/Colors"
-import {Sizes} from "../optionsProduct/Sizes"
-import {Brands} from "../optionsProduct/Brands"
+import React, { useContext } from "react"
+import { Link } from "react-router-dom"
+import { useGetProductByCategoryQuery } from "../../redux/products/products.api"
+import { faCartShopping, faCheck, faStar } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Loader } from "../loader/Loader"
+import { useDispatch, useSelector } from "react-redux"
+import { addProductToCart } from "../../redux/products/products.slice"
+import { Context } from "../../context/context"
+import { Colors } from "../optionsProduct/Colors"
+import { Sizes } from "../optionsProduct/Sizes"
+import { Brands } from "../optionsProduct/Brands"
 
-export function ProductDetailItem({product, refetch, status}) {
+export function ProductDetailItem({ product, refetch, status }) {
     const contextId = useContext(Context)
-    const {cart} = useSelector(state => state.product)
+    const { cart } = useSelector(state => state.product)
 
-    const {data, isLoading, error} = useGetProductByCategoryQuery(product.category_id)
+    const { data, isLoading, error } = useGetProductByCategoryQuery(product.category_id)
     const filterProductFooter = data?.filter(item => item.id !== product.producto_id)
 
     const isCart = !!cart.find(el => el.id === product.producto_id)
@@ -63,12 +63,15 @@ export function ProductDetailItem({product, refetch, status}) {
                 </p>
                 <div className='flex flex-col justify-center items-center lg:flex lg:flex-row lg:justify-between lg:items-start'>
                     <div className='w-full shadow-lg rounded-md flex justify-center items-center lg:w-2/4 sm:w-3/4'>
-                        <img className='w-2/4 lg:w-3/4' src={product.image} alt={product.name}/>
+                        <img className='w-2/4 lg:w-3/4' src={product.image} alt={product.name} />
                     </div>
                     <div className='w-full pl-0 sm:w-3/4 lg:w-2/4 lg:pl-[30px]'>
                         <div>
                             <p className='font-medium text-xl mt-5 lg:mt-0 md:text-2xl'>{product.name}</p>
                             <p className='my-4 text-xl sm:text-2xl'>${product.price}</p>
+                            <p className={`text-sm font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-red-500'}`}>
+                                {product.stock > 0 ? `Stock disponible: ${product.stock}` : 'Por pedido'}
+                            </p>
                             <div className='flex justify-start'>
                                 <div className='mr-4'>
                                     <span className='mr-2 text-base font-semibold'>{product.rating.rate}</span>
@@ -104,11 +107,11 @@ export function ProductDetailItem({product, refetch, status}) {
                         {
                             filterProductFooter?.map(product => (
                                 <Link to={`/products/${product.producto_id}`}
-                                      onClick={() => clickHandler(product.producto_id)}
-                                      key={product.producto_id}
-                                      className='flex flex-col justify-evenly items-center border mx-1 py-1 rounded-lg shadow-lg productItem'
+                                    onClick={() => clickHandler(product.producto_id)}
+                                    key={product.producto_id}
+                                    className='flex flex-col justify-evenly items-center border mx-1 py-1 rounded-lg shadow-lg productItem'
                                 >
-                                    <img className='w-[100px]' src={product.image} alt={product.name}/>
+                                    <img className='w-[100px]' src={product.image} alt={product.name} />
                                     <div>
                                         <p className='w-[200px] text-center'>{product.name}</p>
                                         <p className='font-medium text-center'>${product.price}</p>

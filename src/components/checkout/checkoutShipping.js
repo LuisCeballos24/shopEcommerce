@@ -23,8 +23,8 @@ const CheckoutItem = ({ item, onRemove, onIncrement, onDecrement }) => {
           <img className='w-[60px]' src={item.image} alt={item.name} />
           <span className='pl-3 pt-2 text-sm sm:text-lg'>{item.name}</span>
         </div>
-        <button 
-          className='h-fit pt-2 cursor-pointer text-[#3e77aa] hover:text-red-500 transition' 
+        <button
+          className='h-fit pt-2 cursor-pointer text-[#3e77aa] hover:text-red-500 transition'
           onClick={() => onRemove(item.producto_id)}
         >
           🗑️
@@ -62,59 +62,73 @@ export function CheckoutShipping() {
   const location = useLocation();
   const navigate = useNavigate();
   const { cart: initialCart } = location.state || {};
-  
+
   const [cartItems, setCartItems] = useState(initialCart || []);
-  const [selectedProvince, setSelectedProvince] = useState("Panamá"); // Default value
-  const [selectedDistrict, setSelectedDistrict] = useState("Panamá"); // Default value
-  const [deliveryFee, setDeliveryFee] = useState(2.00); // Default fee
+  const [selectedProvince, setSelectedProvince] = useState("Panamá");
+  const [selectedDistrict, setSelectedDistrict] = useState("Panamá");
+  const [deliveryFee, setDeliveryFee] = useState(2.00);
   const [showMinAmountError, setShowMinAmountError] = useState(false);
-  const [pickupLocation, setPickupLocation] = useState("Estación del Ingenio"); // Default pickup
+  const [pickupLocation, setPickupLocation] = useState("Estación del Ingenio");
+  const [isPickup, setIsPickup] = useState(false);
 
-  useEffect(() => {
-    if (!selectedProvince) {
-      setSelectedProvince("Panamá");
-      setSelectedDistrict("Panamá");
-      setDeliveryFee(2.00);
-      setPickupLocation("Estación del Ingenio");
-    }
-  }, []);
-
-   const handleProvinceChange = (event) => {
-    const province = event.target.value;
-    setSelectedProvince(province);
-    
-    // Reset district when province changes
-    if (province === "Panamá") {
-      setSelectedDistrict("Panamá");
-      setDeliveryFee(2.00);
-    } else if (province === "San Miguelito") {
-      setSelectedDistrict("San Miguelito");
-      setDeliveryFee(2.50);
+  // Función para calcular el delivery fee basado en la provincia/distrito
+  const calculateDeliveryFee = (province, district) => {
+    if (district === "Panamá") {
+      return 2.00;
+    } else if (district === "San Miguelito") {
+      return 2.50;
     } else {
-      setSelectedDistrict("");
-      setDeliveryFee(0);
+      return 2.00; // Fee por defecto
     }
   };
 
-  const selectedProvinceData = ubications[0].provinces.find(
+  useEffect(() => {
+    // Solo establecer el fee si no es pickup
+    if (!isPickup) {
+      const fee = calculateDeliveryFee(selectedProvince, selectedDistrict);
+      setDeliveryFee(fee);
+    }
+  }, [selectedProvince, selectedDistrict, isPickup]);
+
+  const handleProvinceChange = (event) => {
+    const province = event.target.value;
+    setSelectedProvince(province);
+
+    // Reset district when province changes
+    if (province === "Panamá") {
+      setSelectedDistrict("Panamá");
+    } else if (province === "San Miguelito") {
+      setSelectedDistrict("San Miguelito");
+    } else {
+      setSelectedDistrict("");
+    }
+  };
+
+  const handlePickupToggle = () => {
+    const newIsPickup = !isPickup;
+    setIsPickup(newIsPickup);
+    
+    if (newIsPickup) {
+      // Cuando se activa recoger en local, no hay costo de envío
+      setDeliveryFee(0);
+    } else {
+      // Si se desactiva, se vuelve a aplicar el fee según la ubicación
+      const fee = calculateDeliveryFee(selectedProvince, selectedDistrict);
+      setDeliveryFee(fee);
+    }
+  };
+
+  const selectedProvinceData = ubications[0]?.provinces?.find(
     (province) => province.name === selectedProvince
   );
 
-  const selectedDistrictData = selectedProvinceData?.districts.find(
+  const selectedDistrictData = selectedProvinceData?.districts?.find(
     (district) => district.name === selectedDistrict
   );
 
   const handleDistrictChange = (event) => {
     const district = event.target.value;
     setSelectedDistrict(district);
-    
-    if (district === "Panamá") {
-      setDeliveryFee(2.00);
-    } else if (district === "San Miguelito") {
-      setDeliveryFee(2.50);
-    } else {
-      setDeliveryFee(0);
-    }
   };
 
   const incrementProduct = (producto_id) => {
@@ -138,7 +152,7 @@ export function CheckoutShipping() {
   };
 
   const removeProduct = (producto_id) => {
-    setCartItems(prevItems => 
+    setCartItems(prevItems =>
       prevItems.filter(item => item.producto_id !== producto_id)
     );
   };
@@ -153,27 +167,28 @@ export function CheckoutShipping() {
 
   const handleProceedToPayment = () => {
     const subtotal = calculateSubtotal();
-    
+
     if (subtotal < 10) {
       setShowMinAmountError(true);
-      
+
       // Scroll to error message
       window.scrollTo({
         top: 0,
         behavior: 'smooth'
       });
-      
+
       return;
     }
-  
+
     navigate('/checkoutpayment', {
       state: {
         cart: cartItems,
         shippingDetails: {
+          isPickup,
           province: selectedProvince,
           district: selectedDistrict,
-          deliveryFee: deliveryFee,
-          pickupLocation: pickupLocation
+          deliveryFee,
+          pickupLocation: isPickup ? "Panamá, Panamá, Betania, Camino Real" : pickupLocation,
         },
         total: calculateTotal()
       }
@@ -186,7 +201,7 @@ export function CheckoutShipping() {
         {/* Sección de detalles de envío */}
         <div className="w-full sm:w-2/3 bg-white p-8 rounded-lg shadow-sm">
           <h2 className="text-xl font-bold mb-4">Shipping Details</h2>
-          
+
           {showMinAmountError && (
             <div className="mb-4 p-4 bg-red-50 border-l-4 border-red-500">
               <div className="flex">
@@ -197,7 +212,7 @@ export function CheckoutShipping() {
                 </div>
                 <div className="ml-3">
                   <p className="text-sm text-red-700">
-                    El monto mínimo para completar la compra es de $10.00. 
+                    El monto mínimo para completar la compra es de $10.00.
                     Agrega más productos para continuar.
                   </p>
                 </div>
@@ -206,14 +221,27 @@ export function CheckoutShipping() {
           )}
 
           <div className="mb-4">
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={isPickup}
+                onChange={handlePickupToggle}
+                className="mr-2"
+              />
+              Recoger en local (sin costo de envío)
+            </label>
+          </div>
+
+          <div className="mb-4">
             <label className="block text-gray-700 mb-2">Province</label>
-            <select 
-              value={selectedProvince} 
-              onChange={handleProvinceChange} 
+            <select
+              value={selectedProvince}
+              onChange={handleProvinceChange}
               className="w-full border px-3 py-2 rounded-lg"
+              disabled={isPickup}
             >
               <option>Seleccionar Provincia</option>
-              {ubications[0].provinces.map((province) => (
+              {ubications[0]?.provinces?.map((province) => (
                 <option key={province.name} value={province.name}>
                   {province.name}
                 </option>
@@ -226,11 +254,11 @@ export function CheckoutShipping() {
             <select
               className="w-full p-3 border border-gray-300 rounded-lg"
               onChange={handleDistrictChange}
-              disabled={!selectedProvince}
+              disabled={isPickup || !selectedProvince}
               value={selectedDistrict}
             >
               <option>Seleccionar Distrito</option>
-              {selectedProvinceData?.districts.map((district) => (
+              {selectedProvinceData?.districts?.map((district) => (
                 <option key={district.name} value={district.name}>
                   {district.name}
                 </option>
@@ -240,22 +268,43 @@ export function CheckoutShipping() {
 
           <div>
             <label className="block text-gray-700 mb-2">Estacion del metro</label>
-            <select className="w-full p-3 border border-gray-300 rounded-lg" disabled={!selectedDistrict}>
+            <select className="w-full p-3 border border-gray-300 rounded-lg"
+              disabled={isPickup || !selectedDistrict}>
               <option>Seleccionar Estacion del metro</option>
-              {selectedDistrictData?.metroStations.map((station) => (
+              {selectedDistrictData?.metroStations?.map((station) => (
                 <option key={station} value={station}>
                   {station}
                 </option>
               ))}
             </select>
           </div>
-          
+
           <p className="text-gray-700 mt-4">Delivery Fee: ${deliveryFee.toFixed(2)}</p>
           
-          <button 
+          {isPickup && (
+            <div className="mt-6">
+              <h3 className="font-bold mb-2">Ubicación para recoger</h3>
+              <p className="text-gray-700">
+                Panamá, Panamá, Betania, Camino Real. Frente al gimnasio Yuyin Luzcando.
+              </p>
+              <div className="mt-4">
+                <iframe
+                  title="Ubicación Pickup"
+                  src="https://www.google.com/maps?q=9.00992,-79.52273&z=17&output=embed"
+                  className="w-full h-64 border rounded-lg"
+                  allowFullScreen
+                  loading="lazy"
+                ></iframe>
+              </div>
+            </div>
+          )}
+
+          <button
             onClick={handleProceedToPayment}
             className={`mt-6 w-full text-white py-3 px-4 rounded-lg font-medium transition duration-200 ${
-              cartItems.length === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+              cartItems.length === 0 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-blue-500 hover:bg-blue-600'
             }`}
             disabled={cartItems.length === 0}
           >

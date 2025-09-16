@@ -77,7 +77,7 @@ export function CartShopping({ cart }) {
                   </div>
                   <button
                     className="text-sm sm:text-lg uppercase bg-black text-white py-1 px-4 rounded hover:bg-gray-500 transition mt-1 sm:mt-0"
-                    onClick={handleBuyNowClick}
+                    onClick={() => {handleBuyNowClick(); toggleClose();}}
                   >
                     Comprar ahora
                   </button>

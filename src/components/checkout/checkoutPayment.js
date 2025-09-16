@@ -13,22 +13,31 @@ export function CheckoutPayment() {
 
   const handleRedirect = () => {
     if (!cart || cart.length === 0) return;
-
+  
     const itemsMessage = cart.map(item =>
       `${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`
     ).join("%0A");
-
-    const shippingMessage = shippingDetails ?
-      `%0A%0A*Provincia:* ${shippingDetails.province}%0A*Distrito:* ${shippingDetails.district}%0A*Costo de envío:* $${shippingDetails.deliveryFee.toFixed(2)}` : '';
-
+  
+    let shippingMessage = '';
+    if (shippingDetails) {
+      if (shippingDetails.pickupLocation) {
+        // Es recogida local
+        shippingMessage = `%0A%0A*Ubicación de recogida:* ${shippingDetails.pickupLocation}%0A*Costo de envío:* $0.00`;
+      } else {
+        // Es envío a domicilio
+        shippingMessage = `%0A%0A*Provincia:* ${shippingDetails.province}%0A*Distrito:* ${shippingDetails.district}%0A*Costo de envío:* $${shippingDetails.deliveryFee.toFixed(2)}`;
+      }
+    }
+  
     const totalMessage = `%0A%0A*Total a pagar:* $${total}`;
     const baseMessage = `*Pedido realizado*%0A%0A*Productos:*%0A${itemsMessage}${shippingMessage}${totalMessage}%0A%0A¡Hola! Quiero confirmar mi pedido.`;
-
+  
     window.open(`https://wa.me/${executives[0].number}?text=${baseMessage}`, '_blank');
     setTimeout(() => {
       window.open(`https://wa.me/${executives[1].number}?text=${baseMessage}`, '_blank');
     }, 1000);
   };
+  
 
   return (
     <main className="container mx-auto px-4 py-8">

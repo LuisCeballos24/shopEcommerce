@@ -9,7 +9,9 @@ import {Search} from "../search/Search"
 export function Header() {
     const {cart, btnCart} = useSelector(state => state.product)
     const dispatch = useDispatch()
-    const toggleCart = () => dispatch(toggleBtnCart(true))
+    const toggleCart = () => {
+        dispatch(toggleBtnCart(true)); // Mostrar el modal
+    };
     const toggleSearch = () => dispatch(toggleSearchForm(true))
 
     btnCart
@@ -17,6 +19,7 @@ export function Header() {
         : document.querySelector('body').style.overflow = 'visible'
 
     return (
+        <>
         <header className='w-screen bg-[#221f1f] fixed z-10 top-0 h-[60px]'>
             <div className='container text-lg flex justify-between items-center text-white h-[50px] max-w-[1240px] m-auto px-2'>
             <a href='/' className='flex items-center'>
@@ -39,5 +42,6 @@ export function Header() {
             </div>
             {btnCart && <CartShopping cart={cart}/>}
         </header>
+    </>
     )
 }

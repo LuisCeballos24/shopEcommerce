@@ -1,13 +1,14 @@
 import React from "react"
-import {useGetProductsAllQuery} from "../redux/products/products.api"
-import {ProductItem} from "../components/product-item/ProductItem"
-import {Loader} from "../components/loader/Loader"
-import {ProductFilters} from "../components/product-filters/ProductFilters"
-import {useSelector} from "react-redux"
+import { useGetProductsAllQuery } from "../redux/products/products.api"
+import { ProductItem } from "../components/product-item/ProductItem"
+import { Loader } from "../components/loader/Loader"
+import { ProductFilters } from "../components/product-filters/ProductFilters"
+import { useSelector } from "react-redux"
+import { ProductCarousel } from "../components/carousel/carousel";
 
 export function HomePage() {
     const { data, error, isLoading, status } = useGetProductsAllQuery()
-    const {filters, searchFilterProducts} = useSelector(state => state.product)
+    const { filters, searchFilterProducts } = useSelector(state => state.product)
 
     const filterByCategory = (category) => {
         return data?.filter(product => product.Category.name === category)
@@ -33,7 +34,7 @@ export function HomePage() {
 
     const filterSearch = data => {
         if (data.length > 0) {
-            return data.map(product => <ProductItem product={product} key={product.producto_id}/>)
+            return data.map(product => <ProductItem product={product} key={product.producto_id} />)
         } else {
             return <p className='mt-[30px] mx-auto'>Products not found...</p>
         }
@@ -45,24 +46,35 @@ export function HomePage() {
         if (filters.rating) return filterByRating(filters.rating)
         if (searchFilterProducts) return filterSearch(searchFilterProducts)
 
-        return data?.map(product => <ProductItem product={product} key={product.producto_id}/>)
+        return data?.map(product => <ProductItem product={product} key={product.producto_id} />)
     }
 
     return (
         <>
-            <div className='container mb-[20px] mt-[60px] max-w-[1240px] flex flex-col justify-center items-center xl:flex xl:justify-center xl:flex-row xl:items-start mx-auto transition-all flex-auto'>
+            <div className="container max-w-[1240px] mx-auto mt-[60px] mb-[20px] px-4 transition-all flex flex-col">
                 {isLoading && <Loader />}
-                {error && <p className='text-center mt-4'>{error.error}</p>}
-                {status === 'fulfilled' &&
+                {error && <p className="text-center mt-4">{error.error}</p>}
+                {status === "fulfilled" && (
                     <>
-                        <div className='lg:w-3/5 xl:w-1/5 flex flex-col items-center mt-[10px]'>
-                            <ProductFilters/>
+                        {/* Carrusel siempre arriba */}
+                        <div className="w-full mb-10">
+                        <ProductCarousel products={data} />
                         </div>
-                        <div className='w-4/5 flex flex-wrap justify-center md:w-full xl:justify-start xl:ml-[20px]'>
-                            {renderProducts()}
+
+                        {/* Sección filtros + productos */}
+                        <div className="flex flex-col xl:flex-row xl:items-start xl:gap-6">
+                            {/* Filtros */}
+                            <div className="w-full lg:w-3/5 xl:w-1/5 flex flex-col items-center mb-6 xl:mb-0">
+                                <ProductFilters />
+                            </div>
+
+                            {/* Productos */}
+                            <div className="w-full xl:flex-1 flex flex-wrap justify-center xl:justify-start">
+                                {renderProducts()}
+                            </div>
                         </div>
                     </>
-                }
+                )}
             </div>
         </>
     )
